@@ -13,17 +13,20 @@
 ActiveRecord::Schema.define(version: 2022_03_06_113025) do
 
   create_table "applications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
-    t.text "token"
+    t.string "token", limit: 24
     t.string "name"
     t.integer "chats_count", default: 0
+    t.integer "next_chat_number", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_applications_on_token", unique: true
   end
 
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "number"
     t.string "name"
     t.integer "messages_count", default: 0
+    t.integer "next_message_number", default: 1
     t.bigint "application_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

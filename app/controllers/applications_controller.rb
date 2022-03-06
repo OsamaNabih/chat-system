@@ -3,19 +3,21 @@ class ApplicationsController < ApplicationController
   before_action :block_blank_name, only: [:create, :update]
 
   def index
+    #apps = Application.select_exclude_id.all
+    apps = Application.connection.select_all("SELECT token, chats_count, created_at, updated_at FROM applications")
+    render json: apps
     #@apps = Application.all
-    @apps = Application.connection.select_all("SELECT token, chats_count, created_at, updated_at FROM applications")
-    render json: @apps
+    #@apps = Application.pluck(:token, :chats_count, :created_at, :updated_at)
+    #exclude_cols = ["id"]
+    #@apps = Application.select(Application.attribute_names - exclude_cols)
   end
 
   def show
-    @app = @app.pluck(:token, :chats_count)
-    render json: @app
+    render json: @app.as_json(except: ["id", "next_chat_number"])
   end
 
   def create
     @app = Application.new(application_params)
-    @app[:token] = SecureRandom.urlsafe_base64
     if @app.save
       render json: {msg: "Application created successfully", token: @app[:token]}, status: :ok
     else
@@ -24,24 +26,19 @@ class ApplicationsController < ApplicationController
   end
 
   def update
-    if @app.update(article_params)
+    if @app.update(application_params)
       render json: {msg: "Application updated successfully"}, status: :ok
     else
-      render json: {msg: "Application update failed. Please double check the data provided"}, status: :unprocessable_entity
+      render json: {msg: @app.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
   def destroy
     @app.destroy
-    head :ok
+    render json: {msg: "Application destroyed successfully"}, status: :ok
   end
 
   private
-    def set_application
-      # Raise record not found exception if the provided token doesn't match any of our records
-      @app = Application.find_by_token!(params[:id])
-    end
-
     def application_params
       params.require(:application).permit(:name)
     end
