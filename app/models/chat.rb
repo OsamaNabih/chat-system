@@ -6,7 +6,7 @@ class Chat < ApplicationRecord
   # Commenting this out saves us an extra query to check if this [application_id, number] pair already exist
   #validates :number, uniqueness: { scope: :application_id, message: "Chat number must be unique per application"}
 
-  searchkick
+  searchkick # [:messages]
 
   def search_data
     {

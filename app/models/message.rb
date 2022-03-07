@@ -1,7 +1,7 @@
 class Message < ApplicationRecord
   belongs_to :chat
 
-  searchkick
+  searchkick # [:body]
 
   def search_data
     {

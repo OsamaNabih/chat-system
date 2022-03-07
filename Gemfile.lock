@@ -58,6 +58,8 @@ GEM
       faraday (~> 1)
       multi_json
     erubi (1.10.0)
+    faker (2.20.0)
+      i18n (>= 1.8.11, < 2)
     faraday (1.10.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -171,6 +173,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
   elasticsearch (~> 7.17.1)
+  faker (~> 2.20)
   listen (>= 3.0.5, < 3.2)
   mysql2 (>= 0.4.4, < 0.6.0)
   puma (~> 3.11)

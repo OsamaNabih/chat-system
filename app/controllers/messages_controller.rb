@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
   before_action :set_application
   before_action :set_chat
-  before_action :set_message, except: [:index, :create]
+  before_action :set_message, except: [:index, :create, :search]
 
   def index
     @messages = Chat.connection.select_all("SELECT number, body, created_at, updated_at FROM messages")
@@ -35,6 +35,19 @@ class MessagesController < ApplicationController
     @message.destroy
     @chat.update(messages_count: @chat.messages_count - 1)
     render json: {msg: "Message destroyed successfully"}, status: :ok
+  end
+
+  def search
+    # If no search body, return all messages
+    search_body = params[:body]
+    if search_body.to_s.strip.empty?
+      self.index
+    end
+    # Else search for partial match
+    res = Message.search("bod")
+    render json: res
+    #Rails.logger.info(res)
+    #render json: {msg: "We've arrived"}
   end
 
   private

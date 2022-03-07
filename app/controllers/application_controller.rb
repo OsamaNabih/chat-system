@@ -6,12 +6,14 @@ class ApplicationController < ActionController::API
   end
 
   def set_application
+    Rails.logger.info("Setting app-------------------")
     # Raise record not found exception if the provided token doesn't match any of our records
-    @app = Application.find_by_token!(params[:id] || params[:application_id])
+    @app = Application.find_by_token!(params[:application_id] || params[:id])
   end
 
   def set_chat
-    @chat = @app.chats.find_by_number!(params[:id] || params[:chat_id])
+    Rails.logger.info("Setting chat-------------------")
+    @chat = @app.chats.find_by_number!(params[:chat_id] || params[:id])
   end
 
   def set_message
