@@ -1,7 +1,10 @@
 class MessagesController < ApplicationController
-  before_action :set_application
-  before_action :set_chat
-  before_action :set_message, except: [:index, :create, :search]
+  # We don't need the app or chat to search for a message as we have the app_id and chat_number in the URL
+  # which are all we need for our ElasticSearch query as they are indexed there
+  # Thus saving 2 SELECT queries on the search endpoint
+  before_action :set_application, except: [:search_messages] 
+  before_action :set_chat, except: [:search_messages]
+  before_action :set_message, except: [:index, :create, :search_messages]
 
   def index
     @messages = Chat.connection.select_all("SELECT number, body, created_at, updated_at FROM messages")
@@ -37,17 +40,20 @@ class MessagesController < ApplicationController
     render json: {msg: "Message destroyed successfully"}, status: :ok
   end
 
-  def search
+  def search_messages
     # If no search body, return all messages
     search_body = params[:body]
     if search_body.to_s.strip.empty?
       self.index
+      return
     end
     # Else search for partial match
-    res = Message.search("bod")
-    render json: res
-    #Rails.logger.info(res)
-    #render json: {msg: "We've arrived"}
+    result = Message.search(search_body,
+              fields: [:body],
+              where: {app_token: params[:application_id], chat_number: params[:chat_id]}, 
+              match: :text_middle)
+    matches = result.results
+    render json: matches
   end
 
   private

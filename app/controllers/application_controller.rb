@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
   end
 
   def set_message
-    @message = @chat.messages.find_by_numer!(params[:id])
+    @message = @chat.messages.find_by_number!(params[:id])
   end
 
 end

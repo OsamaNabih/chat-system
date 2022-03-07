@@ -15,7 +15,7 @@ class ChatsController < ApplicationController
   def create
     @chat = @app.chats.create(chat_params.merge({number: @app.next_chat_number}))
     if @chat.save
-      @app.update(chats_count: @app.chats_count + 1, next_chat_number: @app.next_chat_number + 1)
+      #@app.update(chats_count: @app.chats_count + 1, next_chat_number: @app.next_chat_number + 1)
       render json: {msg: "Chat created successfully", number: @chat[:number]}, status: :ok
     else
       render json: {msg: @chat.errors.full_messages}, status: :unprocessable_entity
