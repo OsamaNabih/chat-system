@@ -9,6 +9,10 @@ gem 'rails', '~> 5.2.6'
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
+# Searchkick client for elasticsearch
+gem 'searchkick', '~> 5.0.2'
+# Elasticsearch
+gem 'elasticsearch', "~> 7.17.1"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

@@ -1,6 +1,7 @@
 version: "2"
 services:
   mysql:
+    container_name: mysql
     image: mysql:8
     environment:
     - MYSQL_ROOT_PASSWORD=password
@@ -12,34 +13,36 @@ services:
       static-network:
         ipv4_address: 172.20.128.1
     volumes:
-      - mysql-data:/var/lib/mysql
+      - ~/volumes/mysql-data:/var/lib/mysql
 
-  # elasticsearch:
-  #   container_name: es-container
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
-  #   environment:
-  #     - xpack.security.enabled=false
-  #     - "discovery.type=single-node"
-  #   networks:
-  #     #- es-net
-  #     static-network:
-  #       ipv4_address: 172.20.128.2
-  #   ports:
-  #     - 9200:9200  
+  elasticsearch:
+    container_name: es-container
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.1
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+    volumes:
+      - ~/volumes/elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      #- es-net
+      static-network:
+        ipv4_address: 172.20.128.2
+    ports:
+      - 9200:9200  
       
-  # kibana:
-  #   container_name: kb-container
-  #   image: docker.elastic.co/kibana/kibana:7.11.0
-  #   environment:
-  #     - ELASTICSEARCH_HOSTS=http://es-container:9200
-  #   networks:
-  #     #- es-net
-  #       static-network:
-  #         ipv4_address: 172.20.128.3
-  #   depends_on:
-  #     - elasticsearch
-  #   ports:
-  #     - 5601:5601
+  kibana:
+    container_name: kb-container
+    image: docker.elastic.co/kibana/kibana:7.17.1
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es-container:9200
+    networks:
+      #- es-net
+        static-network:
+          ipv4_address: 172.20.128.3
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
 
 networks:
   static-network:
@@ -50,3 +53,4 @@ networks:
         ip_range: 172.28.5.0/24
 volumes:
   mysql-data:
+  elasticsearch-data:
