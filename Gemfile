@@ -19,6 +19,14 @@ gem 'elasticsearch', "~> 7.17.1"
 gem 'redis', '~> 4.0'
 # Redlock implements a distributed lock algorithm for Redis to avoid race conditions
 gem 'redlock'
+# Better performance for Redis
+gem 'hiredis', '~> 0.6.1'
+# Sidekiq for jobs
+gem 'sidekiq'
+gem 'sidekiq-client-cli'
+#gem 'sidekiq-unique-jobs', '~> 6.0.0'
+# Cron jobs
+gem 'whenever'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

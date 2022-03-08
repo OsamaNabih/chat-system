@@ -26,7 +26,7 @@ class ApplicationsController < ApplicationController
   end
 
   def update
-    if @app.update(application_params)
+    if Application.update(@app.id, application_params)
       render json: {msg: "Application updated successfully"}, status: :ok
     else
       render json: {msg: @app.errors.full_messages}, status: :unprocessable_entity

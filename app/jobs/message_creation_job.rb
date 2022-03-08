@@ -1,4 +1,4 @@
-class CountRecalculationJob < ApplicationJob
+class MessageCreationJob < ApplicationJob
   queue_as :default
 
   def perform(*args)

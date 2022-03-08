@@ -1,9 +1,9 @@
 class Chat < ApplicationRecord
   has_many :messages, dependent: :delete_all
-  belongs_to :application, counter_cache: :chats_count
+  belongs_to :application #, counter_cache: :chats_count
 
-  after_create :update_counts
-  after_commit :update_cache
+  #after_create :update_counts
+  #after_commit :update_cache
 
   validates :name, presence: true
 
@@ -13,6 +13,8 @@ class Chat < ApplicationRecord
   # Commenting this out saves us an extra query to check if this [application_id, number] pair already exist
   #validates :number, uniqueness: { scope: :application_id, message: "Chat number must be unique per application"}
 
+  
+  # ElasticSearch in case we index the chats
   # searchkick # [:messages]
 
   # def search_data
@@ -25,8 +27,14 @@ class Chat < ApplicationRecord
   # end
 
   def update_counts
+    puts "Inside update counts"
+    #CountRecalculationJob.perform_later self
     #application.update(chats_count: application.chats_count + 1, next_chat_number: application.next_chat_number + 1)
     #application.update(next_chat_number: application.next_chat_number + 1)
+  end
+
+  def self.update_messages_count
+    UpdateMessagesCountJob.perform_now
   end
 
   def self.redis_get(redis_key)

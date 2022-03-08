@@ -1,6 +1,6 @@
 class Application < ApplicationRecord
   has_many :chats, dependent: :delete_all
-  after_commit :update_cache
+  #after_commit :update_cache
   #after_destroy :reset_cache
 
   has_secure_token
@@ -17,11 +17,22 @@ class Application < ApplicationRecord
   # Instance method to be called after saving or updating an app in the DB
   def redis_set
     redis_key = "app_#{token}"
-    puts self.to_json
     $redis.set(redis_key, self.to_json)
   end
 
-  
+  # def self.update_chats_count
+  #   puts "Updating counts"
+  #   apps = Application.all
+  #   apps.each do |app|
+  #     app.chats_count = app.chats.count
+  #     app.save!
+  #   end
+  #   #self.chats_count = self.chats.count
+  # end
+
+  def self.update_chats_count
+    UpdateChatsCountJob.perform_now
+  end
 
   # Called after save, update, destroy to update our cache
   def update_cache
