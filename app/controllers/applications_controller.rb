@@ -3,13 +3,8 @@ class ApplicationsController < ApplicationController
   before_action :block_blank_name, only: [:create, :update]
 
   def index
-    #apps = Application.select_exclude_id.all
     apps = Application.connection.select_all("SELECT token, chats_count, created_at, updated_at FROM applications")
     render json: apps
-    #@apps = Application.all
-    #@apps = Application.pluck(:token, :chats_count, :created_at, :updated_at)
-    #exclude_cols = ["id"]
-    #@apps = Application.select(Application.attribute_names - exclude_cols)
   end
 
   def show

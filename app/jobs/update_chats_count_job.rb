@@ -7,10 +7,16 @@ class UpdateChatsCountJob < ApplicationJob
   def perform
     puts "Updating apps chats_count job"
     apps = Application.all
+    apps_hash = apps.index_by(&:id)
     chats_counts = Application.connection.select_all('SELECT c.application_id, Count(*) as count FROM `chat-system-api_development`.chats as c GROUP BY c.application_id ORDER BY c.application_id;')
-    apps.each_with_index do |app, idx|
-      app.chats_count = chats_counts[idx]["count"]
+    chats_counts.each_with_index do |res|
+      app = apps_hash[res["application_id"]]
+      # Here we don't have to worry about fetching a parent, and we do need to set the updated_at field
+      # So we opt for saving the record instead of update_column
+      # An update query will only be issued if the count has changed
+      app.chats_count = res["count"]
       app.save!
     end
   end
 end
+

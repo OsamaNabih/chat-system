@@ -13,22 +13,14 @@ class ChatsController < ApplicationController
   end
 
   def create
-    #@chat = @app.chats.create(chat_params.merge({number: @app.next_chat_number}))
-    #@chat = @app.chats.create(chat_params.merge({number: chat_number}))
     chat_number = self.get_chat_number
     chat = chat_params.merge({number: chat_number, application_id: @app.id})
     ChatCreationJob.perform_later chat
-    render json: {msg: "Chat created successfully", number: chat_number}, status: :created
-    #@chat = Chat.create(chat_params.merge({number: chat_number, application_id: @app.id}))
-    # if @chat.save
-    #   render json: {msg: "Chat created successfully", number: @chat[:number]}, status: :ok
-    # else
-    #   render json: {msg: @chat.errors.full_messages}, status: :unprocessable_entity
-    # end
+    render json: {msg: "Chat creation scheduled successfully", number: chat_number}, status: :created
   end
 
   def update 
-    if @chat.update(chat_params)
+    if Chat.update(@chat.id, chat_params)
       render json: {msg: "Chat updated successfully"}, status: :ok
     else
       render json: {msg: "Chat update failed. Please double check the data provided"}, status: :unprocessable_entity
@@ -55,7 +47,7 @@ class ChatsController < ApplicationController
 
     def get_chat_number
       redis_key = "app_#{params[:application_id]}_chat_number"
-      redis_lock_key = redis_key + "lock"
+      redis_lock_key = redis_key + "_lock"
       lock = $lock_manager.lock(redis_lock_key, 200)
       chat_number = $redis.get(redis_key)
       if chat_number.nil?

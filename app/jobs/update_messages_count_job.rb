@@ -7,10 +7,15 @@ class UpdateMessagesCountJob < ApplicationJob
   def perform
     puts "Updating chats messages_count job"
     chats = Chat.all
-    messages_counts = chat.connection.select_all('SELECT m.chat_id, Count(*) as count FROM `chat-system-api_development`.messages as m GROUP BY m.chat_id ORDER BY m.chat_id;')
-    chats.each_with_index do |chat, idx|
-      chat.messages_count = messages_counts[idx]["count"]
-      chat.save!
+    chats_hash = chats.index_by(&:id)
+    messages_counts = Chat.connection.select_all('SELECT m.chat_id, Count(*) as count FROM `chat-system-api_development`.messages as m GROUP BY m.chat_id ORDER BY m.chat_id;')
+    messages_counts.each do |res|
+      chat = chats_hash[res["chat_id"]]
+      # Here we choose update_column instead of save as this avoids a fetch query to get the parent application to update its "updated_at" field
+      # However update_column ALWAYS issues an update query so we need to check if the count has changed manually
+      unless chat.messages_count == res["count"]
+        chat.update_column(:messages_count, res["count"])
+      end
     end
   end
 end

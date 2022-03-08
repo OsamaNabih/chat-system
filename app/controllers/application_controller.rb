@@ -19,22 +19,21 @@ class ApplicationController < ActionController::API
   def set_chat
     chat_number = params[:chat_id] || params[:id]
     redis_key = "app_#{@app.token}_chat_#{chat_number}"
-    cached_chat = Chat.redis_get(redis_key)
-    @chat = cached_chat
+    @chat = Chat.redis_get(redis_key)
     if @chat.nil?
-      @chat = @app.chats.find_by_number(chat_number)
+      @chat = @app.chats.find_by_number!(chat_number)
       @chat.redis_set
     end
   end
 
   def set_message
     msg_number = params[:id]
-    redis_key = "app_#{@app.token}_chat_#{chat_number}_msg_#{msg_number}"
+    redis_key = "app_#{@app.token}_chat_#{@chat.number}_msg_#{msg_number}"
     cached_msg = Message.redis_get(redis_key)
-    @msg = cached_msg
-    if @msg.nil?
-      @msg = @chat.messages.find_by_number(msg_number)
-      @msg.redis_set
+    @message = cached_msg
+    if @message.nil?
+      @message = @chat.messages.find_by_number!(msg_number)
+      @message.redis_set
     end
   end
 

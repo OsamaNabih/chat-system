@@ -1,7 +1,8 @@
 class MessageCreationJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
-    # Do something later
+  def perform(message)
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!MESSAGE CREATION JOB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Message.create(message)
   end
 end
