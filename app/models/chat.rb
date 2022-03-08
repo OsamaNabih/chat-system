@@ -57,11 +57,11 @@ class Chat < ApplicationRecord
     $redis.get(redis_key).nil?
   end
 
-  #
+  
   def update_cache
-    puts "Inside update cache"
+    puts "Inside chat's update cache"
     unless self.not_cached?
-      puts "Updating cache"
+      puts "Updating chat cache"
       self.redis_set
     end
   end

@@ -15,6 +15,7 @@ class UpdateMessagesCountJob < ApplicationJob
       # However update_column ALWAYS issues an update query so we need to check if the count has changed manually
       unless chat.messages_count == res["count"]
         chat.update_column(:messages_count, res["count"])
+        # Need to explicitly call this as update_column won't call after_commit
         chat.update_cache
       end
     end

@@ -16,6 +16,7 @@ class UpdateChatsCountJob < ApplicationJob
       # An update query will only be issued if the count has changed
       app.chats_count = res["count"]
       app.save!
+      app.update_cache
     end
   end
 end
