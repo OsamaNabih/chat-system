@@ -26,6 +26,7 @@ class Message < ApplicationRecord
   end
 
   def redis_set
+    puts "Caching message"
     redis_key = "app_#{chat.application.token}_chat_#{chat.number}_msg_#{number}"
     $redis.set(redis_key, self.to_json)
   end

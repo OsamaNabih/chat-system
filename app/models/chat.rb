@@ -3,7 +3,7 @@ class Chat < ApplicationRecord
   belongs_to :application #, counter_cache: :chats_count
 
   #after_create :update_counts
-  #after_commit :update_cache
+  after_commit :update_cache
 
   validates :name, presence: true
 
@@ -45,10 +45,24 @@ class Chat < ApplicationRecord
 
   def redis_set
     redis_key = "app_#{application.token}_chat_#{number}"
+    puts "Caching chat"
     $redis.set(redis_key, self.to_json)
   end
 
+  def not_cached?
+    redis_key = "app_#{application.token}_chat_#{number}"
+    puts "Checking if key #{redis_key} is cached"
+    puts $redis.get(redis_key)
+    puts $redis.get(redis_key).nil?
+    $redis.get(redis_key).nil?
+  end
+
+  #
   def update_cache
-    self.redis_set
+    puts "Inside update cache"
+    unless self.not_cached?
+      puts "Updating cache"
+      self.redis_set
+    end
   end
 end

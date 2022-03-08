@@ -19,7 +19,9 @@ class ApplicationController < ActionController::API
   def set_chat
     chat_number = params[:chat_id] || params[:id]
     redis_key = "app_#{@app.token}_chat_#{chat_number}"
+    puts redis_key
     @chat = Chat.redis_get(redis_key)
+    puts @chat.to_json
     if @chat.nil?
       @chat = @app.chats.find_by_number!(chat_number)
       @chat.redis_set

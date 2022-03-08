@@ -16,6 +16,7 @@ class Application < ApplicationRecord
 
   # Instance method to be called after saving or updating an app in the DB
   def redis_set
+    puts "Caching app"
     redis_key = "app_#{token}"
     $redis.set(redis_key, self.to_json)
   end
