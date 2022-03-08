@@ -13,9 +13,24 @@ class ChatsController < ApplicationController
   end
 
   def create
-    @chat = @app.chats.create(chat_params.merge({number: @app.next_chat_number}))
+    redis_key = "app_#{params[:application_id]}_chat_number"
+    redis_lock_key = redis_key + "lock"
+    lock = $lock_manager.lock(redis_lock_key, 200)
+    puts "LOCK: #{lock}"
+    chat_number = $redis.get(redis_key)
+    puts "Chat_num: #{chat_number}"
+    if chat_number.nil?
+      chat_number = (@app.chats.maximum(:number) || 0) + 1
+      puts "Setting chat number #{chat_number}"
+      $redis.set(redis_key, chat_number)
+    end
+    puts "??????????????????????????#{redis_key}?????????????????"
+    $redis.incr(redis_key)
+    $lock_manager.unlock(lock)
+    #@chat = @app.chats.create(chat_params.merge({number: @app.next_chat_number}))
+    #@chat = @app.chats.create(chat_params.merge({number: chat_number}))
+    @chat = Chat.create(chat_params.merge({number: chat_number, application_id: @app.id}))
     if @chat.save
-      #@app.update(chats_count: @app.chats_count + 1, next_chat_number: @app.next_chat_number + 1)
       render json: {msg: "Chat created successfully", number: @chat[:number]}, status: :ok
     else
       render json: {msg: @chat.errors.full_messages}, status: :unprocessable_entity

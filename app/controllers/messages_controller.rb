@@ -16,10 +16,9 @@ class MessagesController < ApplicationController
   end
 
   def create
-    logger.info "---------------Chat: #{@chat}"
     @message = @chat.messages.create(message_params.merge({number: @chat.next_message_number}))
     if @chat.save
-      @chat.update(messages_count: @chat.messages_count + 1, next_message_number: @chat.next_message_number + 1)
+      #@chat.update(messages_count: @chat.messages_count + 1, next_message_number: @chat.next_message_number + 1)
       render json: {msg: "Message created successfully", number: @message[:number]}, status: :ok
     else
       render json: {msg: @message.errors.full_messages}, status: :unprocessable_entity
@@ -48,12 +47,14 @@ class MessagesController < ApplicationController
       return
     end
     # Else search for partial match
-    result = Message.search(search_body,
+    response = Message.search(search_body,
               fields: [:body],
-              where: {app_token: params[:application_id], chat_number: params[:chat_id]}, 
-              match: :text_middle)
-    matches = result.results
-    render json: matches
+              where: {app_token: params[:application_id], chat_number: params[:chat_id]},
+              # load: false, # This fetches data from ES only and doesn't fetch anything from our DB
+              match: :text_middle
+              )
+    results = response.results
+    render json: results
   end
 
   private

@@ -50,4 +50,8 @@ class ApplicationsController < ApplicationController
         render json: {msg: "Name must not be empty"}, status: :unprocessable_entity
       end
     end
+
+    def set_application
+      super
+    end
 end

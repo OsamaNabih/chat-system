@@ -26,7 +26,7 @@ unless Rails.env == "production"
 
   chats.each do |chat|
     for idx in 1..3
-      message = { body: Faker::Lorem.sentence(word_count: 30, supplemental: false, random_words_to_add: 50), number: chat.next_message_number }
+      message = { body: Faker::Lorem.sentence(word_count: 30, supplemental: false, random_words_to_add: 50), number: idx }
       chat.messages.create(message)
     end
     

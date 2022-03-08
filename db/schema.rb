@@ -44,6 +44,6 @@ ActiveRecord::Schema.define(version: 2022_03_06_113025) do
     t.index ["number", "chat_id"], name: "index_messages_on_number_and_chat_id", unique: true
   end
 
-  add_foreign_key "chats", "applications"
-  add_foreign_key "messages", "chats"
+  add_foreign_key "chats", "applications", on_delete: :cascade
+  add_foreign_key "messages", "chats", on_delete: :cascade
 end

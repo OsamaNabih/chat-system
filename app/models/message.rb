@@ -1,7 +1,10 @@
 class Message < ApplicationRecord
-  belongs_to :chat
+  belongs_to :chat, counter_cache: :messages_count
 
   after_create :update_counts
+  #after_commit :searchkick_indexing
+
+  validates :body, presence: true
 
   searchkick text_middle: [:body]
   
@@ -17,7 +20,11 @@ class Message < ApplicationRecord
   end
 
   def update_counts
-    chat.update(messages_count: chat.messages_count + 1, next_message_number: chat.next_message_number + 1)
+    #chat.update(messages_count: chat.messages_count + 1, next_message_number: chat.next_message_number + 1)
+    #chat.update(next_message_number: chat.next_message_number + 1)
   end
 
+  # def searchkick_indexing
+  #   Message.reindex
+  # end
 end

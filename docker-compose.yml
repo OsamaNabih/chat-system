@@ -21,28 +21,53 @@ services:
     environment:
       - xpack.security.enabled=false
       - "discovery.type=single-node"
-    volumes:
-      - ~/volumes/elasticsearch-data:/usr/share/elasticsearch/data
     networks:
-      #- es-net
       static-network:
         ipv4_address: 172.20.128.2
     ports:
-      - 9200:9200  
-      
-  kibana:
-    container_name: kb-container
-    image: docker.elastic.co/kibana/kibana:7.17.1
-    environment:
-      - ELASTICSEARCH_HOSTS=http://es-container:9200
+      - 9200:9200
+    volumes:
+      - ~/volumes/elasticsearch-data:/usr/share/elasticsearch/data
+
+  redis:
+    container_name: redis
+    image: 'redis:6.0-alpine'
+    command: redis-server
     networks:
-      #- es-net
-        static-network:
-          ipv4_address: 172.20.128.3
-    depends_on:
-      - elasticsearch
+      static-network:
+        ipv4_address: 172.20.128.3
     ports:
-      - 5601:5601
+      - '6379:6379'
+    volumes:
+      - ~/volumes/redis-data:/data
+    
+  # kibana:
+  #   container_name: kb-container
+  #   image: docker.elastic.co/kibana/kibana:7.17.1
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://es-container:9200
+  #   networks:
+  #     #- es-net
+  #       static-network:
+  #         ipv4_address: 172.20.128.5
+  #   depends_on:
+  #     - elasticsearch
+  #   ports:
+  #     - 5601:5601
+
+# server:
+#   depends_on:
+#     - 'mysql'
+#     - 'redis'
+#     - 'es-container'
+#     #- 'kb-container'
+#   build: .
+#   ports:
+#     - '3000:3000'
+#   volumes:
+#     - '.:/app'
+#   # env_file:
+#   #   - '.env'
 
 networks:
   static-network:
@@ -54,3 +79,4 @@ networks:
 volumes:
   mysql-data:
   elasticsearch-data:
+  redus-data:

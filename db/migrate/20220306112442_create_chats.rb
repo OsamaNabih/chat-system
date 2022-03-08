@@ -5,11 +5,11 @@ class CreateChats < ActiveRecord::Migration[5.2]
       t.string :name
       t.integer :messages_count, default: 0
       t.integer :next_message_number, default: 1
-      t.references :application, null: false, foreign_key: true
+      t.references :application, null: false, index: true
       t.index [:number, :application_id], unique: true
 
       t.timestamps
     end
-    #add_index :people, [:firstname, :lastname, :dob], unique: true
+    add_foreign_key :chats, :applications, on_delete: :cascade
   end
 end
