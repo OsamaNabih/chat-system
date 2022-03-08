@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
   end
 
   def show
-    render json: @chat.as_json.except("id")
+    render json: @message.as_json.except("id")
   end
 
   def create
@@ -34,7 +34,7 @@ class MessagesController < ApplicationController
   end
 
   def destroy 
-    @message.destroy
+    Message.destroy(@message.id)
     @chat.update(messages_count: @chat.messages_count - 1)
     render json: {msg: "Message destroyed successfully"}, status: :ok
   end

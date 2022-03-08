@@ -34,7 +34,7 @@ class ApplicationsController < ApplicationController
   end
 
   def destroy
-    @app.destroy
+    Application.destroy(@app.id)
     render json: {msg: "Application destroyed successfully"}, status: :ok
   end
 

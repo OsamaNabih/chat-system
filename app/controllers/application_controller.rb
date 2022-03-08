@@ -9,12 +9,11 @@ class ApplicationController < ActionController::API
     # Raise record not found exception if the provided token doesn't match any of our records
     app_token = params[:application_id] || params[:id]
     redis_key = "app_#{app_token}"
-    cached_app = Application.redis_get(redis_key)
-    @app = cached_app
+    @app = Application.redis_get(redis_key)
     if @app.nil?
       @app = Application.find_by_token!(app_token)
       @app.redis_set
-    end 
+    end
   end
 
   def set_chat
@@ -39,10 +38,10 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def get_from_cache
-    app_token = params[:application_id] || params[:id]
-    redis_key = "app_#{app_token}"
-    cached_app = Application.redis_get(redis_key)
-  end
+  # def get_from_cache
+  #   app_token = params[:application_id] || params[:id]
+  #   redis_key = "app_#{app_token}"
+  #   cached_app = Application.redis_get(redis_key)
+  # end
 
 end
