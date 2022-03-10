@@ -26,7 +26,7 @@ gem 'sidekiq'
 gem 'sidekiq-client-cli'
 #gem 'sidekiq-unique-jobs', '~> 6.0.0'
 # Cron jobs
-gem 'whenever'
+gem 'whenever', require: false
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

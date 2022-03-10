@@ -14,6 +14,10 @@ services:
         ipv4_address: 172.20.128.1
     volumes:
       - ~/volumes/mysql-data:/var/lib/mysql
+    #cap_add:
+    #  - SYS_NICE  # CAP_SYS_NICE
+    security_opt:
+      - seccomp:unconfined
 
   elasticsearch:
     container_name: es-container
@@ -43,37 +47,56 @@ services:
     
   
 
-  # server:
-  #   depends_on:
-  #     - 'mysql'
-  #     - 'redis'
-  #     - 'es-container'
-  #     #- 'kb-container'
-  #   build: .
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - '.:/app'
-  #   # env_file:
-  #   #   - '.env'
+  server:
+    container_name: rails_server
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.4
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/chat-system-api
+    depends_on:
+      - 'mysql'
+      - 'redis'
+      - 'es-container'
+    # env_file:
+    #   - '.env'
 
-  # sidekiq:
-  #     depends_on:
-  #       #- 'db'
-  #       - 'redis'
-  #     #build: .
-  #     #command: bundle exec sidekiq
-  #     volumes:
-  #       #- '.:/project'
-  #       #- '/project/tmp' # don't mount tmp directory
-  #       - ~/volumes/sidekiq-data:/data
-  #     networks:
-  #       static-network:
-  #         ipv4_address: 172.20.128.3
-  #     ports:
-        
-  #     #environment:
-  #     #  - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+  sidekiq:
+    container_name: sidekiq
+    depends_on:
+      - 'mysql'
+      - 'redis'
+    build: .
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - ~/volumes/sidekiq-data:/data
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.5
+    #ports:
+    environment:
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+  
+  whenever:
+    container_name: cron
+    depends_on:
+      - 'server'
+      - 'mysql'
+    build: .
+    command: > 
+            bash -c "bundle exec whenever --clear-crontab && 
+            service cron start && 
+            bundle exec whenever --update-crontab &&
+            touch log/cron.log &&
+            tail -f log/cron.log"
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.6
+
 
 networks:
   static-network:
@@ -100,4 +123,6 @@ networks:
 volumes:
   mysql-data:
   elasticsearch-data:
-  redus-data:
+  #redis-data:
+  .:
+  rails-data:

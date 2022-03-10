@@ -31,7 +31,7 @@ Rails.application.configure do
   # Using Redis
   config.action_controller.perform_caching = true
   config.cache_store = :redis_cache_store, { 
-    host: 'localhost',
+    host: '172.20.128.3',
     port: 6379,
     db: 0
   }

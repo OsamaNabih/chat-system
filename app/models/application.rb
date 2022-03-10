@@ -37,23 +37,17 @@ class Application < ApplicationRecord
 
   # Called after save, update, destroy to update our cache
   def update_cache
-    puts "Updating cache"
     self.redis_set
   end
 
-  def not_cached?
-    redis_key = "app_#{application.token}_chat_#{number}"
-    puts "Checking if key #{redis_key} is cached"
-    puts $redis.get(redis_key)
-    puts $redis.get(redis_key).nil?
-    $redis.get(redis_key).nil?
+  def cached?
+    redis_key = "app_#{token}"
+    !$redis.get(redis_key).nil?
   end
 
   
   def update_cache
-    puts "Inside app's update cache"
-    unless self.not_cached?
-      puts "Updating app cache"
+    if self.cached?
       self.redis_set
     end
   end

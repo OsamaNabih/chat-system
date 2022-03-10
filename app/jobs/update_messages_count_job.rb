@@ -9,6 +9,7 @@ class UpdateMessagesCountJob < ApplicationJob
     chats = Chat.all
     chats_hash = chats.index_by(&:id)
     messages_counts = Chat.connection.select_all('SELECT m.chat_id, Count(*) as count FROM `chat-system-api_development`.messages as m GROUP BY m.chat_id ORDER BY m.chat_id;')
+    puts messages_counts
     messages_counts.each do |res|
       chat = chats_hash[res["chat_id"]]
       # Here we choose update_column instead of save as this avoids a fetch query to get the parent application to update its "updated_at" field
