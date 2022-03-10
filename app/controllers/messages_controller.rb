@@ -44,7 +44,7 @@ class MessagesController < ApplicationController
       return
     end
     # Else search for partial match
-    response = @message.search(search_body,
+    response = Message.search(search_body,
               fields: [:body],
               where: {app_token: params[:application_id], chat_number: params[:chat_id]},
               # load: false, # This fetches data from ES only and doesn't fetch anything from our DB

@@ -5,6 +5,9 @@ class Application < ApplicationRecord
 
   has_secure_token
 
+  after_commit :update_cache
+  after_save :redis_set
+
   #scope :select_exclude_id, ->  { select( Application.attribute_names - ['id'] ) }
 
   # Class method so we can use it check the existence of an App in redis cache
@@ -47,9 +50,10 @@ class Application < ApplicationRecord
 
   
   def update_cache
-    if self.cached?
-      self.redis_set
-    end
+    #if self.cached?
+      #self.redis_set
+    #end
+    self.redis_set
   end
 
   ## Cache integrity functions for deletions

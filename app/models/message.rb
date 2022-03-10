@@ -3,6 +3,7 @@ class Message < ApplicationRecord
 
   #after_create :update_counts
   #after_commit :searchkick_indexing
+  after_commit :update_cache
 
   validates :body, presence: true
 
@@ -31,9 +32,16 @@ class Message < ApplicationRecord
     $redis.set(redis_key, self.to_json)
   end
 
-  def update_counts
-    #chat.update(messages_count: chat.messages_count + 1, next_message_number: chat.next_message_number + 1)
-    #chat.update(next_message_number: chat.next_message_number + 1)
+  def cached?
+    redis_key = "app_#{chat.application.token}_chat_#{chat.number}_msg_#{number}"
+    !$redis.get(redis_key).nil?
+  end
+
+  def update_cache
+    #if self.cached?
+      #self.redis_set
+    #end
+    self.redis_set
   end
 
   # def searchkick_indexing

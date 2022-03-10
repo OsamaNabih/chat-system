@@ -50,7 +50,7 @@ services:
   server:
     container_name: rails_server
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
     networks:
       static-network:
         ipv4_address: 172.20.128.4
@@ -61,7 +61,10 @@ services:
     depends_on:
       - 'mysql'
       - 'redis'
-      - 'es-container'
+      - 'elasticsearch'
+    environment:
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+      - ELASTICSEARCH_URL=http://172.20.128.2:9200
     # env_file:
     #   - '.env'
 
@@ -71,15 +74,15 @@ services:
       - 'mysql'
       - 'redis'
     build: .
-    command: bundle exec sidekiq -C config/sidekiq.yml
+    command: sidekiq -C config/sidekiq.yml
     volumes:
-      - ~/volumes/sidekiq-data:/data
+      - .:/chat-system-api
     networks:
       static-network:
         ipv4_address: 172.20.128.5
-    #ports:
     environment:
       - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+      - ELASTICSEARCH_URL=http://172.20.128.2:9200
   
   whenever:
     container_name: cron
@@ -88,14 +91,16 @@ services:
       - 'mysql'
     build: .
     command: > 
-            bash -c "bundle exec whenever --clear-crontab && 
-            service cron start && 
-            bundle exec whenever --update-crontab &&
+            bash -c "service cron start && 
             touch log/cron.log &&
+            whenever --clear-crontab && 
+            whenever --update-crontab &&
             tail -f log/cron.log"
     networks:
       static-network:
         ipv4_address: 172.20.128.6
+    volumes:
+      - .:/chat-system-api
 
 
 networks:
@@ -123,6 +128,6 @@ networks:
 volumes:
   mysql-data:
   elasticsearch-data:
-  #redis-data:
+  redis-data:
   .:
-  rails-data:
+  #rails-data:

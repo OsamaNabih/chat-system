@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_06_113025) do
+ActiveRecord::Schema.define(version: 2022_03_10_110439) do
 
   create_table "applications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.string "token", limit: 24
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2022_03_06_113025) do
     t.integer "next_chat_number", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "deleted", default: false
     t.index ["token"], name: "index_applications_on_token", unique: true
   end
 
@@ -30,6 +31,7 @@ ActiveRecord::Schema.define(version: 2022_03_06_113025) do
     t.bigint "application_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "deleted", default: false
     t.index ["application_id"], name: "index_chats_on_application_id"
     t.index ["number", "application_id"], name: "index_chats_on_number_and_application_id", unique: true
   end
@@ -40,6 +42,7 @@ ActiveRecord::Schema.define(version: 2022_03_06_113025) do
     t.bigint "chat_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "deleted", default: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["number", "chat_id"], name: "index_messages_on_number_and_chat_id", unique: true
   end

@@ -31,8 +31,7 @@ class ApplicationController < ActionController::API
   def set_message
     msg_number = params[:id]
     redis_key = "app_#{@app.token}_chat_#{@chat.number}_msg_#{msg_number}"
-    cached_msg = Message.redis_get(redis_key)
-    @message = cached_msg
+    @message = Message.redis_get(redis_key)
     if @message.nil?
       @message = @chat.messages.find_by_number!(msg_number)
       @message.redis_set
