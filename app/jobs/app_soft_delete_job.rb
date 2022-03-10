@@ -4,6 +4,7 @@ class AppSoftDeleteJob < ApplicationJob
   def perform(app)
     chats = app.chats
     chats.update_all(deleted: true)
+    app_key = "app_#{app.token}"
 
     chat_ids = chats.pluck("id")
     messages = Message.where(chat_id: chat_ids)

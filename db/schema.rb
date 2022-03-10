@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_10_110439) do
+ActiveRecord::Schema.define(version: 2022_03_10_165503) do
 
   create_table "applications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.string "token", limit: 24
     t.string "name"
     t.integer "chats_count", default: 0
-    t.integer "next_chat_number", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "deleted", default: false
@@ -27,7 +26,6 @@ ActiveRecord::Schema.define(version: 2022_03_10_110439) do
     t.integer "number"
     t.string "name"
     t.integer "messages_count", default: 0
-    t.integer "next_message_number", default: 1
     t.bigint "application_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

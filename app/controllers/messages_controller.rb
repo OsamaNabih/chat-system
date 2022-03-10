@@ -31,8 +31,8 @@ class MessagesController < ApplicationController
   end
 
   def destroy 
-    #@message.destroy(@message.id)
-    #@chat.update(messages_count: @chat.messages_count - 1)
+    Message.delete(@message.id)
+    Message.redis_clear(@message_redis_key)
     render json: {msg: "message destroyed successfully"}, status: :ok
   end
 

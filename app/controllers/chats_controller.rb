@@ -29,8 +29,7 @@ class ChatsController < ApplicationController
 
   def destroy 
     Chat.destroy(@chat.id)
-    #Application.update(@app.id, {chats_count: @app.chats_count - 1})
-    #@app.update(chats_count: @app.chats_count - 1)
+    Chat.redis_clear(@chat_redis_key)
     render json: {msg: "Chat destroyed successfully"}, status: :ok
   end
 

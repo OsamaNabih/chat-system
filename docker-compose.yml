@@ -13,7 +13,7 @@ services:
       static-network:
         ipv4_address: 172.20.128.1
     volumes:
-      - ~/volumes/mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     #cap_add:
     #  - SYS_NICE  # CAP_SYS_NICE
     security_opt:
@@ -31,7 +31,7 @@ services:
     ports:
       - 9200:9200
     volumes:
-      - ~/volumes/elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch-data:/usr/share/elasticsearch/data
 
   redis:
     container_name: redis
@@ -43,7 +43,7 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - ~/volumes/redis-data:/data
+      - redis-data:/data
     
   
 
@@ -130,4 +130,3 @@ volumes:
   elasticsearch-data:
   redis-data:
   .:
-  #rails-data:
