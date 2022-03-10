@@ -32,6 +32,7 @@ class MessagesController < ApplicationController
 
   def destroy 
     Message.delete(@message.id)
+    Message.searchkick_index.remove(@message)
     Message.redis_clear(@message_redis_key)
     render json: {msg: "message destroyed successfully"}, status: :ok
   end
@@ -66,16 +67,14 @@ class MessagesController < ApplicationController
     end
 
     def get_message_number
-      redis_key = "app_#{@app.token}_chat_#{@chat.number}_msg"
-      redis_lock_key = redis_key + "_lock"
+      redis_lock_key = @message_redis_key.to_s + "_lock"
       lock = $lock_manager.lock(redis_lock_key, 200)
-      message_number = $redis.get(redis_key)
+      message_number = $redis.get(@message_redis_key)
       if message_number.nil?
         message_number = (@chat.messages.maximum(:number) || 0) + 1
-        $redis.set(redis_key, message_number)
+        $redis.set(@message_redis_key, message_number + 1)
       end
-      $redis.incr(redis_key)
       $lock_manager.unlock(lock)
-      message_number
+      message_number.to_i
     end
 end

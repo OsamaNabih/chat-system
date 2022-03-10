@@ -22,11 +22,11 @@ set :output, "./log/cron.log"
 #   command "echo 'hello' >> /home/osama/output.txt"
 # end
 
-every 1.minute do
+every 30.minute do
   runner "Application.update_chats_count"
 end
 
-every 1.minute do
+every 30.minute do
   runner "Chat.update_messages_count"
   command "echo 'hello'"
 end

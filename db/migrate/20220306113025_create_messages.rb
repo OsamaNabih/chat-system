@@ -8,6 +8,6 @@ class CreateMessages < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
-    add_foreign_key :messages, :chats, on_delete: :cascade
+    #add_foreign_key :messages, :chats, on_delete: :cascade
   end
 end

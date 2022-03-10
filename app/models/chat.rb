@@ -1,5 +1,5 @@
 class Chat < ApplicationRecord
-  has_many :messages, dependent: :delete_all
+  has_many :messages
   belongs_to :application
 
   after_commit :update_cache

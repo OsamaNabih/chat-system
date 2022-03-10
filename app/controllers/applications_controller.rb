@@ -31,7 +31,7 @@ class ApplicationsController < ApplicationController
   def destroy
     Application.destroy(@app.id)
     Application.redis_clear(@app_redis_key)
-    AppSoftDeletionJob.perform_later
+    #AppSoftDeletionJob.perform_later
     render json: {msg: "Application destroyed successfully"}, status: :ok
   end
 

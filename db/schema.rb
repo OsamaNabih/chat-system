@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 2022_03_10_165503) do
     t.integer "chats_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "deleted", default: false
     t.index ["token"], name: "index_applications_on_token", unique: true
   end
 
@@ -29,7 +28,6 @@ ActiveRecord::Schema.define(version: 2022_03_10_165503) do
     t.bigint "application_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "deleted", default: false
     t.index ["application_id"], name: "index_chats_on_application_id"
     t.index ["number", "application_id"], name: "index_chats_on_number_and_application_id", unique: true
   end
@@ -40,11 +38,8 @@ ActiveRecord::Schema.define(version: 2022_03_10_165503) do
     t.bigint "chat_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "deleted", default: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["number", "chat_id"], name: "index_messages_on_number_and_chat_id", unique: true
   end
 
-  add_foreign_key "chats", "applications", on_delete: :cascade
-  add_foreign_key "messages", "chats", on_delete: :cascade
 end

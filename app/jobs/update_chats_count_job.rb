@@ -4,6 +4,8 @@ class UpdateChatsCountJob < ApplicationJob
   # 1 query to fetch apps, Need only 1 query to get the chats count for each app
   # 1 query per saved app ONLY if its chats_count changes
   # Avoid locking the table repeatedly when doing N+1 COUNT(*) query for each app
+  # If this proves too costly we could partition the workd load by specifying a
+  # start and finish application_id parameters to each worker
   def perform
     puts "------------------------UpdateChatsCountJob Job start------------------------"
     puts "#{Time.new.inspect}"
@@ -13,9 +15,8 @@ class UpdateChatsCountJob < ApplicationJob
     
     #start = 1
     #finish = 3
-
-    #chats_counts = Application.connection.select_all('SELECT c.application_id, Count(*) as count_all FROM `chat-system-api_development`.chats as c GROUP BY c.application_id;')
     #chats_counts = Chat.where("application_id >= #{start} and application_id <= #{finish}").group(:application_id).count
+    
     chats_counts = Chat.group(:application_id).count
 
     chats_counts.each do |application_id, count|

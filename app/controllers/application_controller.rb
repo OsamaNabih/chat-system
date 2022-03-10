@@ -29,7 +29,7 @@ class ApplicationController < ActionController::API
   def set_message
     msg_number = params[:id]
     @message_redis_key = Message.get_redis_key({app_token: @app.token, chat_number: @chat.number, msg_number: msg_number})
-    @message = Message.redis_get(@msg_redis_key)
+    @message = Message.redis_get(@message_redis_key)
     if @message.nil?
       @message = @chat.messages.find_by_number!(msg_number)
       @message.redis_set

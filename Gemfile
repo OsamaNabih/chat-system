@@ -11,8 +11,10 @@ gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 gem 'puma', '~> 3.11'
 # Searchkick client for elasticsearch
 gem 'searchkick', '~> 5.0.2'
-# Elasticsearch
+# Elasticsearch for message indexing
 gem 'elasticsearch', "~> 7.17.1"
+# Soft deletes
+#gem 'discard', '~> 0.1.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

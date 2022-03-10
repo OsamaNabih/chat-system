@@ -13,7 +13,7 @@ class ChatsController < ApplicationController
   end
 
   def create
-    chat_number = self.get_chat_number
+    chat_number = get_chat_number
     chat = chat_params.merge({number: chat_number, application_id: @app.id})
     ChatCreationJob.perform_later chat
     render json: {msg: "Chat creation scheduled successfully", number: chat_number}, status: :created
@@ -45,16 +45,14 @@ class ChatsController < ApplicationController
     end
 
     def get_chat_number
-      redis_key = "app_#{params[:application_id]}_chat_number"
-      redis_lock_key = redis_key + "_lock"
+      redis_lock_key = @chat_redis_key.to_s + "_lock"
       lock = $lock_manager.lock(redis_lock_key, 200)
-      chat_number = $redis.get(redis_key)
+      chat_number = $redis.get(@chat_redis_key)
       if chat_number.nil?
         chat_number = (@app.chats.maximum(:number) || 0) + 1
-        $redis.set(redis_key, chat_number)
+        $redis.set(@chat_redis_key, chat_number + 1)
       end
-      $redis.incr(redis_key)
       $lock_manager.unlock(lock)
-      chat_number
+      chat_number.to_i
     end
 end

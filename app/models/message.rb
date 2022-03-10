@@ -2,6 +2,7 @@ class Message < ApplicationRecord
   belongs_to :chat
 
   after_commit :update_cache
+  after_destroy :clear_es_index
 
   validates :body, presence: true
 
@@ -26,6 +27,10 @@ class Message < ApplicationRecord
   end
 
   def redis_key_params
-    { app_token: self.chat.application.token, chat_number: chat.number, msg_number: number }
+    { app_token: self.chat.application.token, chat_number: self.chat.number, msg_number: number }
+  end
+
+  def clear_es_index 
+    Message.searchkick_index.remove(self)
   end
 end
