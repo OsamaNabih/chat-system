@@ -1,0 +1,638 @@
+{
+	"info": {
+		"_postman_id": "7fa50712-cc9e-415e-b13c-3fe0f98f3d9f",
+		"name": "chat-system-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Applications",
+			"item": [
+				{
+					"name": "Applications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"const token = responseJson['token'];\r",
+									"pm.collectionVariables.set(\"app_token\", token);\r",
+									"/*\r",
+									"if (token) {\r",
+									"    \r",
+									"    let tokens = pm.collectionVariables.get(\"tokens\") || \"\";\r",
+									"    tokens = tokens === \"\" ? [] : tokens.split(',');\r",
+									"    tokens.push(token);\r",
+									"    let tokens_str = tokens.length > 1 ? tokens.join() : tokens[0];\r",
+									"    pm.collectionVariables.set(\"tokens\", tokens_str)\r",
+									"    \r",
+									"}\r",
+									"*/  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"my_app\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Application",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Application",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Application",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"edited_app\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Application",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"edited_app\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chats",
+			"item": [
+				{
+					"name": "Chats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"const number = responseJson['number'];\r",
+									"pm.collectionVariables.set(\"chat_number\", number);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"sidekiq_worker_sidekiq\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"edited_chat2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"edited_chat\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"const number = responseJson['number'];\r",
+									"pm.collectionVariables.set(\"msg_number\", number);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"inserted2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Message",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages/{{msg_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{msg_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Message",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages/{{msg_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{msg_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Message",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"edited_msg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages/{{msg_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{msg_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Message",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"edited_msg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages/{{msg_number}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{msg_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/applications/{{app_token}}/chats/{{chat_number}}/messages/search?body=edited",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"search"
+							],
+							"query": [
+								{
+									"key": "body",
+									"value": "edited"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ElasticSearch",
+			"item": [
+				{
+					"name": "All",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{es_url}}/_all",
+							"host": [
+								"{{es_url}}"
+							],
+							"path": [
+								"_all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{es_url}}/messages_development/_search?pretty=true&q=*:*&size=100",
+							"host": [
+								"{{es_url}}"
+							],
+							"path": [
+								"messages_development",
+								"_search"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": "true"
+								},
+								{
+									"key": "q",
+									"value": "*:*"
+								},
+								{
+									"key": "size",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "app_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "chat_number",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "msg_number",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "es_url",
+			"value": "http://localhost:9200",
+			"type": "string"
+		}
+	]
+}
