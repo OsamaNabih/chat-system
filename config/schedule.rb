@@ -28,7 +28,6 @@ end
 
 every 30.minute do
   runner "Chat.update_messages_count"
-  command "echo 'hello'"
 end
 
 # Learn more: http://github.com/javan/whenever

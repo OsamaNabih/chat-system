@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 unless Rails.env == "production"
   apps = []
-  for idx in 1..3
+  for idx in 1..10
     app = {name: "app#{idx}"}
     apps << app
   end
@@ -17,23 +17,20 @@ unless Rails.env == "production"
   
   chats = []
   apps.each do |app| 
-    for idx in 1..3
+    for idx in 1..10
       chat = app.chats.create(name: "app#{app.id}_chat#{idx}", number: idx)
       chats << chat
-      #app.update(chats_count: app.chats_count + 1, next_chat_number: app.next_chat_number + 1)
     end
   end
 
   chats.each do |chat|
-    for idx in 1..3
+    for idx in 1..100
       message = { body: Faker::Lorem.sentence(word_count: 30, supplemental: false, random_words_to_add: 50), number: idx }
       chat.messages.create(message)
     end
     
-    #chat.update(messages_count: chat.messages_count + 1, next_message_number: chat.next_message_number + 1)
   end
 
-  #Chat.reindex
   Message.reindex
 
 end

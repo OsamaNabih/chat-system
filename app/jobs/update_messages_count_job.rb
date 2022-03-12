@@ -14,7 +14,9 @@ class UpdateMessagesCountJob < ApplicationJob
     messages_counts = Message.group(:chat_id).count
     messages_counts.each do |chat_id, count|
       chat = chats_hash[chat_id]
-
+      if chat.nil?
+        next
+      end
       # Here we choose update_column instead of save as this avoids a fetch query to get the parent application
       # However update_column ALWAYS issues an update query so we need to check if the count has changed manually
       unless chat.messages_count == count

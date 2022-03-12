@@ -1,8 +1,15 @@
 class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, :with => :resource_not_found
+  before_action :set_pagination_data
 
   def resource_not_found
     render json: {msg: "Resource not found"}, status: :not_found
+  end
+
+  def set_pagination_data
+    @page = params[:page].to_i
+    @page = (@page < 1 ? 1 : @page) - 1
+    @per_page = ENV.fetch("ITEMS_PER_PAGE", 10)
   end
 
   def set_application
@@ -14,6 +21,7 @@ class ApplicationController < ActionController::API
       @app = Application.find_by_token!(app_token)
       @app.redis_set
     end
+    puts @app
   end
 
   def set_chat
@@ -34,6 +42,10 @@ class ApplicationController < ActionController::API
       @message = @chat.messages.find_by_number!(msg_number)
       @message.redis_set
     end
+  end
+
+  def format_response(response, keys)
+    response.to_json(except: keys)
   end
 
   # def get_from_cache

@@ -7,12 +7,12 @@ class MessagesController < ApplicationController
   before_action :set_message, except: [:index, :create, :search_messages]
 
   def index
-    messages = Chat.connection.select_all("SELECT number, body, created_at, updated_at FROM messages")
-    render json: messages
+    messages = Message.where(chat_id: @chat.id).limit(@per_page).offset(@page*@per_page)
+    render json: format_response(messages)
   end
 
   def show
-    render json: @message.as_json.except("id")
+    render json: format_response(@message)
   end
 
   def create
@@ -52,7 +52,7 @@ class MessagesController < ApplicationController
               match: :text_middle
               )
     results = response.results
-    render json: results
+    render json: format_response(results)
   end
 
   private
@@ -76,5 +76,9 @@ class MessagesController < ApplicationController
       end
       $lock_manager.unlock(lock)
       message_number.to_i
+    end
+
+    def format_response(response)
+      super(response, [:id, :chat_id])
     end
 end

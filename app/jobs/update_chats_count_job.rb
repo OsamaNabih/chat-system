@@ -12,7 +12,6 @@ class UpdateChatsCountJob < ApplicationJob
     apps = Application.all
     apps_hash = apps.index_by(&:id)
 
-    
     #start = 1
     #finish = 3
     #chats_counts = Chat.where("application_id >= #{start} and application_id <= #{finish}").group(:application_id).count
@@ -21,6 +20,9 @@ class UpdateChatsCountJob < ApplicationJob
 
     chats_counts.each do |application_id, count|
       app = apps_hash[application_id]
+      if app.nil?
+        next
+      end
       # Here we don't have to worry about fetching a parent, and we do need to set the updated_at field
       # So we opt for saving the record instead of update_column
       # An update query will only be issued if the count has changed

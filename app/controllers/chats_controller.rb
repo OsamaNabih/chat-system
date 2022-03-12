@@ -1,15 +1,15 @@
 class ChatsController < ApplicationController
-  before_action :set_application
+  before_action :set_application, except: :create
   before_action :set_chat, except: [:index, :create]
   before_action :block_blank_name, only: [:create, :update]
 
   def index 
-    @chats = Chat.connection.select_all("SELECT number, name, messages_count, created_at, updated_at FROM chats")
-    render json: @chats
+    chats = Chat.where(application_id: @app.id).limit(@per_page).offset(@page*@per_page)
+    render json: format_response(chats)
   end
 
   def show
-    render json: @chat.as_json(except: ["id", "next_message_number"])
+    render json: format_response(@chat)
   end
 
   def create
@@ -55,4 +55,9 @@ class ChatsController < ApplicationController
       $lock_manager.unlock(lock)
       chat_number.to_i
     end
+
+    def format_response(response)
+      super(response, [:id, :application_id])
+    end
+
 end

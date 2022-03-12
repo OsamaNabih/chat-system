@@ -1,14 +1,15 @@
 class ApplicationsController < ApplicationController
   before_action :set_application, except: [:index, :create]
   before_action :block_blank_name, only: [:create, :update]
+  include Pagy::Backend
 
   def index
-    apps = Application.connection.select_all("SELECT token, chats_count, created_at, updated_at FROM applications")
-    render json: apps
+    apps = Application.limit(@per_page).offset(@page*@per_page)
+    render json: format_response(apps, [:id])
   end
 
   def show
-    render json: @app.as_json(except: ["id", "next_chat_number"])
+    render json: format_response(@app, [:id])
   end
 
   def create
@@ -50,5 +51,9 @@ class ApplicationsController < ApplicationController
 
     def set_application
       super
+    end
+
+    def format_response(response)
+      super(response, [:id])
     end
 end
