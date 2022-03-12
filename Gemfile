@@ -5,6 +5,8 @@ ruby '2.7.5'
 
 # Environment variables
 gem 'dotenv', '~> 2.1', '>= 2.1.1'
+# Ensure our .env variables are loaded before all dependcies that use them
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.6'
 # Use mysql as the database for Active Record

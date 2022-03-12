@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   def set_pagination_data
     @page = params[:page].to_i
     @page = (@page < 1 ? 1 : @page) - 1
-    @per_page = ENV.fetch("ITEMS_PER_PAGE", 10)
+    @per_page = ENV.fetch("ITEMS_PER_PAGE", 10).to_i
   end
 
   def set_application
@@ -47,11 +47,4 @@ class ApplicationController < ActionController::API
   def format_response(response, keys)
     response.to_json(except: keys)
   end
-
-  # def get_from_cache
-  #   app_token = params[:application_id] || params[:id]
-  #   redis_key = "app_#{app_token}"
-  #   cached_app = Application.redis_get(redis_key)
-  # end
-
 end

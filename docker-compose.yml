@@ -14,8 +14,6 @@ services:
         ipv4_address: 172.20.128.1
     volumes:
       - mysql-data:/var/lib/mysql
-    #cap_add:
-    #  - SYS_NICE  # CAP_SYS_NICE
     security_opt:
       - seccomp:unconfined
 
@@ -62,9 +60,9 @@ services:
       - 'mysql'
       - 'redis'
       - 'elasticsearch'
-    environment:
-      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
-      - ELASTICSEARCH_URL=http://172.20.128.2:9200
+    #environment:
+      # - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+      # - ELASTICSEARCH_URL=http://172.20.128.2:9200
     # env_file:
     #   - '.env'
 
@@ -80,9 +78,10 @@ services:
     networks:
       static-network:
         ipv4_address: 172.20.128.5
-    environment:
-      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
-      - ELASTICSEARCH_URL=http://172.20.128.2:9200
+    #environment:
+      #- '.env'
+      # - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+      # - ELASTICSEARCH_URL=http://172.20.128.2:9200
   
   whenever:
     container_name: cron

@@ -1,15 +1,14 @@
 class ApplicationsController < ApplicationController
   before_action :set_application, except: [:index, :create]
   before_action :block_blank_name, only: [:create, :update]
-  include Pagy::Backend
 
   def index
     apps = Application.limit(@per_page).offset(@page*@per_page)
-    render json: format_response(apps, [:id])
+    render json: format_response(apps)
   end
 
   def show
-    render json: format_response(@app, [:id])
+    render json: format_response(@app)
   end
 
   def create
@@ -32,7 +31,6 @@ class ApplicationsController < ApplicationController
   def destroy
     Application.destroy(@app.id)
     Application.redis_clear(@app_redis_key)
-    #AppSoftDeletionJob.perform_later
     render json: {msg: "Application destroyed successfully"}, status: :ok
   end
 

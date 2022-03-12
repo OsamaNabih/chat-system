@@ -1,5 +1,5 @@
 class ChatsController < ApplicationController
-  before_action :set_application, except: :create
+  before_action :set_application
   before_action :set_chat, except: [:index, :create]
   before_action :block_blank_name, only: [:create, :update]
 
@@ -46,8 +46,9 @@ class ChatsController < ApplicationController
 
     def get_chat_number
       redis_lock_key = @chat_redis_key.to_s + "_lock"
-      lock = $lock_manager.lock(redis_lock_key, 200)
-      chat_number = $redis.get(@chat_redis_key)
+      lock = $lock_manager.lock(redis_lock_key, ENV.fetch("REDIS_TIMEOUT", 100).to_i)
+      next_chat_number_key = @app_redis_key.to_s + "_next"
+      chat_number = $redis.get(next_chat_number_key)
       if chat_number.nil?
         chat_number = (@app.chats.maximum(:number) || 0) + 1
         $redis.set(@chat_redis_key, chat_number + 1)
