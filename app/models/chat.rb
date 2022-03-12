@@ -4,8 +4,6 @@ class Chat < ApplicationRecord
 
   after_commit :update_cache
 
-  validates :name, presence: true
-
   @@redis_key_format = "app_%{app_token}_chat_%{chat_number}"
 
   def self.update_messages_count

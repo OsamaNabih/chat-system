@@ -8,7 +8,7 @@
     git clone https://github.com/OsamaNabih/chat-system-api
     ```
 
-2. Run the command
+2. Run the command (This may take a while)
 
     ```
     docker compose up --build -d
@@ -17,7 +17,9 @@
     *NOTE* The -d flag is for <em>detached</em> mode, which runs the services in the background. Omit to view all the logs in the same terminal.
 
 3. If it's the first time running the app, you need to initialize the DB. <br>
-    So after *ALL* the services are ready, run the following command
+    So after *ALL* the services are ready, we can run the following commands. <br>
+    *NOTE*: If you ran the _up_ command in the foreground, you'll need to open a new terminal for the following commands. <br>
+    To create our schema
     ```
     docker exec -it rails_server rails db:create
     ```
@@ -31,6 +33,13 @@
     ```
 
 4. You can use the Postman collection file "chat-system-api.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
+
+## Re-runs 
+1. To flush the Redis cache, you can run
+  ```
+  docker exec -it redis redis-cli FLUSHALL
+  ```
+2. To remove all data from Elasticsearch, run the appropriate Request for that in the Postman collection.
 
 ## About
 
