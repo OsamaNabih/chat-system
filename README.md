@@ -8,7 +8,7 @@
     git clone https://github.com/OsamaNabih/chat-system-api
     ```
 
-2. Run the command (This may take a while)
+2. Run the command inside the cloned repo (This may take a while)
 
     ```
     docker compose up --build -d
