@@ -1,6 +1,7 @@
 # README
 
 ## Running Instructions
+This project was tested using `Docker version 26.0.0`
 
 1. Clone the repo using
 
