@@ -108,7 +108,7 @@ networks:
       config:
       - subnet: 172.20.0.0/16
         #docker-compose v3+ do not use ip_range
-        ip_range: 172.28.5.0/24
+        # ip_range: 172.28.5.0/24
 
   # kibana:
   #   container_name: kb-container
