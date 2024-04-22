@@ -1,1 +1,1 @@
-#ENV["ELASTICSEARCH_URL"] = "http://172.20.128.2:9200"
+#ENV["ELASTICSEARCH_URL"] = "http://elasticsearch:9200"

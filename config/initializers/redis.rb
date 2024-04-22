@@ -1,4 +1,4 @@
-host = ENV['REDIS_HOST'] || "172.20.128.3"
+host = ENV['REDIS_HOST'] || "redis"
 port = ENV['REDIS_PORT'] || 6379
 db = ENV['REDIS_DB'] || 0
 url = "redis://" + host + ":" + port.to_s
