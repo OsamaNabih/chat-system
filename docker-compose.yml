@@ -67,7 +67,7 @@ services:
       - 'mysql'
       - 'redis'
     build: .
-    command: sidekiq -C config/sidekiq.yml
+    entrypoint: sidekiq -C config/sidekiq.yml
     volumes:
       - .:/chat-system-api
     environment:
@@ -80,7 +80,7 @@ services:
       - 'server'
       - 'mysql'
     build: .
-    command: > 
+    entrypoint: > 
             bash -c "service cron start && 
             touch log/cron.log &&
             whenever --clear-crontab && 
