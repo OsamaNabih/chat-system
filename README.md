@@ -19,15 +19,19 @@
 3. If it's the first time running the app, you need to initialize the DB. <br>
     So after *ALL* the services are ready, we can run the following commands. <br>
     *NOTE*: If you ran the _up_ command in the foreground, you'll need to open a new terminal for the following commands. <br>
-    To create our schema
+    To create our database, run
     ```
     docker exec -it rails_server rails db:create
+    ```
+    To create our tables, run
+    ```
+    docker exec -it rails_server rails db:migrate
     ```
     If you want some dummy data as a starter in the database, you can then run
     ```
     docker exec -it rails_server rails db:seed
     ```
-    You could combine both previous commands into
+    You could combine previous commands into
     ```
     docker exec -it rails_server rails db:setup
     ```
