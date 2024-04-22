@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   mysql:
     container_name: mysql
@@ -9,13 +9,16 @@ services:
     - MYSQL_DATABASE=mysql-db
     ports:
     - "3306:3306"
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.1
     volumes:
       - mysql-data:/var/lib/mysql
     security_opt:
       - seccomp:unconfined
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
 
   elasticsearch:
     container_name: es-container
@@ -23,9 +26,6 @@ services:
     environment:
       - xpack.security.enabled=false
       - "discovery.type=single-node"
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.2
     ports:
       - 9200:9200
     volumes:
@@ -35,9 +35,6 @@ services:
     container_name: redis
     image: 'redis:6.0-alpine'
     command: redis-server
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.3
     ports:
       - '6379:6379'
     volumes:
@@ -48,10 +45,7 @@ services:
   server:
     container_name: rails_server
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.4
+    # command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
     ports:
       - '3000:3000'
     volumes:
@@ -60,9 +54,10 @@ services:
       - 'mysql'
       - 'redis'
       - 'elasticsearch'
-    #environment:
-      # - REDIS_URL_SIDEKIQ=redis://redis:6379/0
-      # - ELASTICSEARCH_URL=http://172.20.128.2:9200
+    environment:
+      - MYSQL_HOST=mysql
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     # env_file:
     #   - '.env'
 
@@ -75,13 +70,9 @@ services:
     command: sidekiq -C config/sidekiq.yml
     volumes:
       - .:/chat-system-api
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.5
-    #environment:
-      #- '.env'
-      # - REDIS_URL_SIDEKIQ=redis://redis:6379/0
-      # - ELASTICSEARCH_URL=http://172.20.128.2:9200
+    environment:
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
   
   whenever:
     container_name: cron
@@ -95,20 +86,8 @@ services:
             whenever --clear-crontab && 
             whenever --update-crontab &&
             tail -f log/cron.log"
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.6
     volumes:
       - .:/chat-system-api
-
-
-networks:
-  static-network:
-    ipam:
-      config:
-      - subnet: 172.20.0.0/16
-        #docker-compose v3+ do not use ip_range
-        # ip_range: 172.28.5.0/24
 
   # kibana:
   #   container_name: kb-container

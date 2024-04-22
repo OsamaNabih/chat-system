@@ -40,7 +40,6 @@ COPY . .
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
 
 # Enable cron service and add our cron job to crontab using the "whenever" gem
 #RUN sudo /usr/sbin/service cron start
@@ -61,5 +60,4 @@ ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 
 # Configure the main process to run when running the image
-#CMD ["rails", "server", "-b", "0.0.0.0"]
-CMD ["bash"]
+ENTRYPOINT ["entrypoint.sh", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
