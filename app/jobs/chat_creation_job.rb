@@ -2,7 +2,7 @@ class ChatCreationJob < ApplicationJob
   queue_as :default
 
   def perform(chat)
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHAT CREATION JOB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHAT CREATION JOB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     Chat.create(chat)
   end
 end

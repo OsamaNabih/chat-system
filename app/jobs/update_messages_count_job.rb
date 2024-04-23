@@ -5,8 +5,8 @@ class UpdateMessagesCountJob < ApplicationJob
   # 1 query per saved chat ONLY if its messages_count changes
   # Avoid locking the table repeatedly when doing N+1 COUNT(*) query for each chat
   def perform
-    puts "------------------------UpdateMessagesCountJob Job start------------------------"
-    puts "#{Time.new.inspect}"
+    Rails.logger.info "------------------------UpdateMessagesCountJob Job start------------------------"
+    Rails.logger.info "#{Time.new.inspect}"
 
     chats = Chat.all
     chats_hash = chats.index_by(&:id)

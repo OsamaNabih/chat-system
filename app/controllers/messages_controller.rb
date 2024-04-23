@@ -71,7 +71,7 @@ class MessagesController < ApplicationController
     def get_message_number
       redis_lock_key = @message_redis_key.to_s + "_lock"
       lock = $lock_manager.lock(redis_lock_key, ENV.fetch("REDIS_TIMEOUT", 100).to_i)
-      puts "MESSAGE KEY: #{@message_redis_key}"
+      Rails.logger.info "MESSAGE KEY: #{@message_redis_key}"
       next_msg_number_key = @chat_redis_key.to_s + "_next"
       message_number = $redis.get(next_msg_number_key)
       if message_number.nil?

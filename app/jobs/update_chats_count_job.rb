@@ -7,8 +7,8 @@ class UpdateChatsCountJob < ApplicationJob
   # If this proves too costly we could partition the workd load by specifying a
   # start and finish application_id parameters to each worker
   def perform
-    puts "------------------------UpdateChatsCountJob Job start------------------------"
-    puts "#{Time.new.inspect}"
+    Rails.logger.info "------------------------UpdateChatsCountJob Job start------------------------"
+    Rails.logger.info "#{Time.new.inspect}"
     apps = Application.all
     apps_hash = apps.index_by(&:id)
 

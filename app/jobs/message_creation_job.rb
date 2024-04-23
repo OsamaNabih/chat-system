@@ -2,7 +2,7 @@ class MessageCreationJob < ApplicationJob
   queue_as :default
   
   def perform(message)
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!MESSAGE CREATION JOB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!MESSAGE CREATION JOB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     begin
       Message.create(message)
     # Handle the case of worker shutting down after creation in DB but not ES
