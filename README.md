@@ -6,7 +6,7 @@ This project was tested using `Docker version 26.0.0`
 1. Clone the repo using
 
     ```
-    git clone https://github.com/OsamaNabih/chat-system-api
+    git clone https://github.com/OsamaNabih/chat-system
     ```
 
 2. Run the command inside the cloned repo (This may take a while)
@@ -37,7 +37,7 @@ This project was tested using `Docker version 26.0.0`
     docker exec -it rails_server rails db:setup
     ```
 
-4. You can use the Postman collection file "chat-system-api.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
+4. You can use the Postman collection file "chat-system.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
 
 ## Re-runs 
 1. To flush the Redis cache, you can run

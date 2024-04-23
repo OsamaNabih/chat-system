@@ -57,7 +57,7 @@ Rails.application.configure do
   config.active_record.verbose_query_logs = true
 
   # 
-  #config.active_job.queue_name_prefix = "chat-system-api_#{Rails.env}"
+  #config.active_job.queue_name_prefix = "chat-system_#{Rails.env}"
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
