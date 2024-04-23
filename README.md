@@ -5,7 +5,7 @@
 1. Clone the repo using
 
     ```
-    git clone https://github.com/OsamaNabih/chat-system-api
+    git clone https://github.com/OsamaNabih/chat-system
     ```
 
 2. Run the command inside the cloned repo (This may take a while)
@@ -16,23 +16,14 @@
 
     *NOTE* The -d flag is for <em>detached</em> mode, which runs the services in the background. Omit to view all the logs in the same terminal.
 
-3. If it's the first time running the app, you need to initialize the DB. <br>
-    So after *ALL* the services are ready, we can run the following commands. <br>
+3. *OPTIONAL*
+    If you want some starter dummy data, you can run
     *NOTE*: If you ran the _up_ command in the foreground, you'll need to open a new terminal for the following commands. <br>
-    To create our schema
-    ```
-    docker exec -it rails_server rails db:create
-    ```
-    If you want some dummy data as a starter in the database, you can then run
     ```
     docker exec -it rails_server rails db:seed
     ```
-    You could combine both previous commands into
-    ```
-    docker exec -it rails_server rails db:setup
-    ```
 
-4. You can use the Postman collection file "chat-system-api.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
+4. You can use the Postman collection file "chat-system.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
 
 ## Re-runs 
 1. To flush the Redis cache, you can run
