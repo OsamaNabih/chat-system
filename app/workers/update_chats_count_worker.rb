@@ -2,7 +2,7 @@
 #   include Sidekiq::Worker
 
 #   def perform
-#     puts "##########################Inside the worker######################"
+#     Rails.logger.info "##########################Inside the worker######################"
 #     Application.update_chats_count
 #   end
 # end
