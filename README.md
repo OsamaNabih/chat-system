@@ -19,12 +19,12 @@ This project was tested using `Docker version 26.0.0`
 
 3. *OPTIONAL*
     If you want some starter dummy data, you can run
-    *NOTE*: If you ran the _up_ command in the foreground, you'll need to open a new terminal for the following commands. <br>
     ```
     docker exec -it rails_server rails db:seed
     ```
+    *NOTE*: If you ran the _up_ command in the foreground, you'll need to open a new terminal for the following commands. <br>
 
-4. You can use the Postman collection file "chat-system.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
+5. You can use the Postman collection file "chat-system.postman_collection" to facilitate working with the API. You'll find collection variables available for your convenience.
 
 ## Re-runs 
 1. To flush the Redis cache, you can run
